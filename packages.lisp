@@ -1,0 +1,2 @@
+(defpackage puzzlesolver
+  (:use :cl))
