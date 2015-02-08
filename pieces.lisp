@@ -100,9 +100,10 @@
     (setf (slot-value piece 'current-shape) target-shape)
     piece))
 
-(defmethod rotate ((piece piece) &key (direction (next-direction piece)))
+(defmethod rotate ((piece piece) &key (direction (next-direction piece)) %skip-compute)
   (setf (slot-value piece 'rotation) direction)
-  (%compute-current-shape piece))
+  (unless %skip-compute
+    (%compute-current-shape piece)))
 
 (defmethod next-direction ((piece piece))
   (next-direction (rotation-of piece)))
@@ -114,9 +115,17 @@
     (:south :west)
     (t :north)))
 
-(defmethod flip ((piece piece))
+(defmethod flip ((piece piece) &key %skip-compute)
   (setf (slot-value piece 'mirrored)
         (not (mirrored-p piece)))
+  (unless %skip-compute
+    (%compute-current-shape piece)))
+
+(defmethod inc-orientation ((piece piece))
+  (incf (current-orientation-of piece))
+  (rotate piece :%skip-compute t)
+  (when (= (current-orientation-of piece) 4)
+    (flip piece :%skip-compute t))
   (%compute-current-shape piece))
 
 (defmethod output ((piece piece))
