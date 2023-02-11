@@ -17,7 +17,7 @@
                 do (princ " "))
           (princ #\.))
     (terpri)
-    (loop for i below (+ 2 (second dimensions)) do (princ #\¨)))
+    (loop for i below (+ 2 (second dimensions)) do (princ #\Â¨)))
   (when *pause-after-print*
     (format t "~&--Press any key to continue (q to break)--~%")
     (when (char-equal #\q (read-char *standard-input*))
